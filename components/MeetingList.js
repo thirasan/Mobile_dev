@@ -1,36 +1,39 @@
 import React, { Component } from 'react'
-import { StyleSheet, Text, View, Image, Button } from 'react-native'
+import { StyleSheet, Text, View, Image, FlatList } from 'react-native'
 import { ListItem } from 'react-native-elements'
 
 export default class MeetingList extends Component {
+  constructor () {
+    super()
+    this.state = {
+      data: [
+        {
+          firstName: 'thirasan',
+          lastName: 'chatwongwan',
+          id: '132423514'
+        },
+        {
+          firstName: 'narongsak',
+          lastName: 'biker',
+          id: '5819342'
+        }
+      ]
+    }
+  }
   render() {
     return (
-      <ListItem
-        title='Limited supply! Its like digital gold!'
-        subtitle={
-          <View style={styles.subtitleView}>
-            <Image source={require('../assets/images/Run.jpeg')} style={styles.ratingImage}/>
-            <Text style={styles.ratingText}>5 months ago</Text>
-          </View>
-        }
-        leftAvatar={{ source: require('../assets/images/Logo.jpeg') }}
+      <FlatList
+        data={this.state.data}
+        renderItem={({ item }) => (
+          <ListItem
+            title={`${item.firstName} ${item.lastName}`}
+            subtitle={item.id}
+            // avatar={{ uri: item.picture.thumbnail }}
+            containerStyle={{ borderWidth: 1, borderColor: 'gray' }}
+          />
+        )}
+        keyExtractor={item => item.id}
       />
     )
   }
 }
-
-styles = StyleSheet.create({
-  subtitleView: {
-    flexDirection: 'row',
-    paddingLeft: 10,
-    paddingTop: 5
-  },
-  ratingImage: {
-    height: 19.21,
-    width: 100
-  },
-  ratingText: {
-    paddingLeft: 10,
-    color: 'grey'
-  }
-})
