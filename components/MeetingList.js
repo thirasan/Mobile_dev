@@ -3,22 +3,33 @@ import { StyleSheet, Text, View, Image, FlatList } from 'react-native'
 import { ListItem } from 'react-native-elements'
 
 export default class MeetingList extends Component {
-  constructor () {
-    super()
+  constructor (props) {
+    super(props)
     this.state = {
-      data: [
-        {
-          firstName: 'thirasan',
-          lastName: 'chatwongwan',
-          id: '132423514'
-        },
-        {
-          firstName: 'narongsak',
-          lastName: 'biker',
-          id: '5819342'
-        }
-      ]
+      data: []
     }
+  }
+  componentDidMount () {
+    const {firebase} = this.props
+    firebase.database.child(firebase.auth.currentUser.uid).on('value', snapshot => {
+      let tempArr = []
+      const meeting = snapshot.val()
+      if (meeting === undefined) return
+      Object.keys(meeting).forEach(val => {
+        tempArr.push({
+          firstName: meeting[val].firstName,
+          lastName: meeting[val].lastName,
+          id: meeting[val].id,
+          meetingName: meeting[val].meetingName,
+          scheduleList: meeting[val].scheduleList.reduce((accumulator, currentValue) => {
+            return accumulator + currentValue.date + '   '
+          }, 'Schedule: ')
+        })
+      })
+      this.setState({
+        data: tempArr
+      })
+    })
   }
   render() {
     return (
@@ -26,8 +37,8 @@ export default class MeetingList extends Component {
         data={this.state.data}
         renderItem={({ item }) => (
           <ListItem
-            title={`${item.firstName} ${item.lastName}`}
-            subtitle={item.id}
+            title={`Meeting Name: ${item.meetingName} with ${item.firstName} ${item.lastName}`}
+            subtitle={item.scheduleList}
             // avatar={{ uri: item.picture.thumbnail }}
             containerStyle={{ borderWidth: 1, borderColor: 'gray' }}
           />

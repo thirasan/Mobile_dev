@@ -4,11 +4,11 @@ import {
   View,
   StyleSheet
 } from 'react-native';
-import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
+import {Agenda} from 'react-native-calendars';
 
 export default class MeetingCalendar extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       items: {
         "2017-05-15": [
@@ -30,8 +30,24 @@ export default class MeetingCalendar extends Component {
       }
     };
   }
-  componentWillUnmount() {
-    clearInterval(this.timer);
+  componentDidMount () {
+    const {firebase} = this.props
+    firebase.database.child(firebase.auth.currentUser.uid).on('value', snapshot => {
+      let tempArr = []
+      const meeting = snapshot.val()
+      if (meeting === undefined) return
+      Object.keys(meeting).forEach(val => {
+        tempArr.push({
+          firstName: meeting[val].firstName,
+          lastName: meeting[val].lastName,
+          id: meeting[val].id,
+          meetingName: meeting[val].meetingName,
+          scheduleList: meeting[val].scheduleList.reduce((accumulator, currentValue) => {
+            return accumulator + currentValue.date + '   '
+          }, 'Schedule: ')
+        })
+      })
+    })
   }
   render(){
     return (

@@ -47,48 +47,60 @@ class Firebase {
 
   doSignOut = () => this.auth.signOut()
 
-  createWallet = (name) => {
-    if (this.auth.currentUser === undefined) return;
-    return this.database.child(this.auth.currentUser.uid).child('wallet').push().set({
-      name: name,
-      total: 0
-    })
-  }
+  // createWallet = (name) => {
+  //   if (this.auth.currentUser === undefined) return;
+  //   return this.database.child(this.auth.currentUser.uid).child('wallet').push().set({
+  //     name: name,
+  //     total: 0
+  //   })
+  // }
 
-  createTask = ({ desc, type, key, value }) => {
-    if (this.auth.currentUser === undefined) return;
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
-    ]
-    const currentDate = new Date();
-    const taskId = `${monthNames[currentDate.getMonth()]}${currentDate.getFullYear()}`
+  // createTask = ({ desc, type, key, value }) => {
+  //   if (this.auth.currentUser === undefined) return;
+  //   const monthNames = ["January", "February", "March", "April", "May", "June",
+  //     "July", "August", "September", "October", "November", "December"
+  //   ]
+  //   const currentDate = new Date();
+  //   const taskId = `${monthNames[currentDate.getMonth()]}${currentDate.getFullYear()}`
   
-    const databaseRef = this.database.child(this.auth.currentUser.uid)
-    const walletRef = databaseRef.child('wallet').child(key)
-    const taskRef = walletRef.child('schedule').child(taskId)
+  //   const databaseRef = this.database.child(this.auth.currentUser.uid)
+  //   const walletRef = databaseRef.child('wallet').child(key)
+  //   const taskRef = walletRef.child('schedule').child(taskId)
 
-    return databaseRef.once('value', snapshot => {
-      const totalRef = parseFloat(snapshot.val()['total'])
-      const totalWallet = parseFloat(snapshot.val()['wallet'][key]['total'])
-      const realValue = parseFloat(type === 'income' ? value : -1*value)
+  //   return databaseRef.once('value', snapshot => {
+  //     const totalRef = parseFloat(snapshot.val()['total'])
+  //     const totalWallet = parseFloat(snapshot.val()['wallet'][key]['total'])
+  //     const realValue = parseFloat(type === 'income' ? value : -1*value)
 
-      if (snapshot.val()['wallet'][key]['schedule'] === undefined) {
-        taskRef.child('total').set(realValue)
-      } else {
-        const totalTask = parseFloat(snapshot.val()['wallet'][key]['schedule'][taskId]['total'])
-        taskRef.child('total').set(totalTask + realValue)
-      }
+  //     if (snapshot.val()['wallet'][key]['schedule'] === undefined) {
+  //       taskRef.child('total').set(realValue)
+  //     } else {
+  //       const totalTask = parseFloat(snapshot.val()['wallet'][key]['schedule'][taskId]['total'])
+  //       taskRef.child('total').set(totalTask + realValue)
+  //     }
     
-      databaseRef.child('total').set(totalRef + realValue)
-      walletRef.child('total').set(totalWallet + realValue)
-      taskRef.child('task')
-        .child(currentDate.getDay())
-        .push()
-        .set({
-          type: type,
-          price: value,
-          desc: desc
-        })
+  //     databaseRef.child('total').set(totalRef + realValue)
+  //     walletRef.child('total').set(totalWallet + realValue)
+  //     taskRef.child('task')
+  //       .child(currentDate.getDay())
+  //       .push()
+  //       .set({
+  //         type: type,
+  //         price: value,
+  //         desc: desc
+  //       })
+  //   })
+  // }
+
+  createSchedule = (meetingName, firstName, lastName, id, meetingList) => {
+    if (this.auth.currentUser === undefined) return;
+    const databaseRef = this.database.child(this.auth.currentUser.uid)
+    databaseRef.push().set({
+      meetingName: meetingName,
+      firstName: firstName,
+      lastName: lastName,
+      id: id,
+      scheduleList: meetingList
     })
   }
 }

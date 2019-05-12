@@ -19,14 +19,13 @@ export default class HomeScreen extends Component {
     this.setState({
       currentScreen: screen
     })
-    console.log(this.state.currentScreen)
   }
 
   renderScreen = () => {
     switch(this.state.currentScreen) {
-      case('calendar') : return <MeetingCalendar />
-      case('meetingList') : return <MeetingList />
-      case('addMeeting') : return <AddMeeting />
+      case('calendar') : return <MeetingCalendar {...this.props}/>
+      case('meetingList') : return <MeetingList {...this.props}/>
+      case('addMeeting') : return <AddMeeting {...this.props}/>
     }
 
   }
