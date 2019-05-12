@@ -43,23 +43,8 @@ const SignIn = ({ email, password, setEmail, setPassword, firebase }) => (
     <Button
       title='Login'
       onPress={() => firebase.doSignInWithEmailAndPassword(email, password)}
-      buttonStyle={{ backgroundColor: '#EA8B38' }}
+      buttonStyle={{ backgroundColor: '#00FFFF' }}
       containerStyle={styles.marginBottom}
-    />
-    <Button
-      title='Login with'
-      icon={
-        <Icon
-        name='google'
-        size={24}
-        color='#fff'
-        style={{ paddingLeft: 8 }}
-        />
-      }
-      iconRight
-      buttonStyle={{ backgroundColor: '#DB4437' }}
-      containerStyle={styles.marginBottom}
-      onPress={() => firebase.doSignInWithGoogle()}
     />
   </>
 )

@@ -60,7 +60,7 @@ const SignUp = ({
     />
     <Button
       title='Register'
-      buttonStyle={{ backgroundColor: '#EA8B38' }}
+      buttonStyle={{ backgroundColor: '#00FFFF' }}
       containerStyle={styles.marginBottom}
       onPress={() => firebase.doCreateUserWithEmailAndPassword(email, password, rePassword)}
     />

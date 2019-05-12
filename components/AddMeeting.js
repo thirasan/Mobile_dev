@@ -29,6 +29,7 @@ export default class AddMeeting extends Component {
       this.state.id,
       this.state.meetingList
     )
+    this.props.switchScreen('calendar')
   }
 
   render() {

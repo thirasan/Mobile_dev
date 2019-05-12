@@ -20,8 +20,7 @@ const LoginScreen = ({
     {
       status === 'signin' ?
         <>
-          <Text h2 style={{ marginBottom: 15, color: '#EA8B38' }}>My wallet</Text>
-          <Text h3 style={{ marginBottom: 10 }}>Sign In</Text>
+          <Text h3 style={{ marginBottom: 10, marginTop: 100 }}>Sign In</Text>
           <SignIn {...props} />
           <View style={{ alignSelf: 'flex-end' }}>
             <Button title='Create Account' onPress={() => setStatus('signup')} color='#000' />
@@ -29,7 +28,7 @@ const LoginScreen = ({
         </>
         :
         <>
-          <Text h3 style={{ marginBottom: 10 }}>Sign Up</Text>
+          <Text h3 style={{ marginBottom: 10, marginTop: 100 }}>Sign Up</Text>
           <SignUp {...props} />
           <View style={{ alignSelf: 'flex-end' }}>
             <Button title='Sign in' onPress={() => setStatus('signin')} color='#000' />

@@ -10,10 +10,6 @@ const withAuthentication = Component => {
 
       this.state = {
         authUser: false,
-        listWallet: [],
-        totalWallet: 0,
-        walletName: '',
-        walletAmount: 0,
       }
     }
 
@@ -23,15 +19,6 @@ const withAuthentication = Component => {
       this.listener = firebase.auth.onAuthStateChanged(authUser => {
         if(authUser) {
           this.setState({ authUser: authUser })
-          // firebase.database.child(authUser.uid)
-          // .on('value', snapshot => {
-          //   if (!snapshot.exists()) {
-          //     firebase.database.child(authUser.uid)
-          //       .set({ total: 0 })
-          //   } else {
-          //     this.getListItem(snapshot.val())
-          //   }
-          // })
         } else {
           this.setState({ authUser: null })
         }
@@ -41,26 +28,6 @@ const withAuthentication = Component => {
     componentWillUnmount() {
       this.listener()
     }
-
-    // getListItem = value => {
-    //   this.setState({ totalWallet: value.total })
-    //   const wallets = value.wallet
-    //   let tempArr = []
-    //   if (wallets !== undefined) {
-    //     Object.keys(wallets).forEach(val => {
-    //       tempArr.push({ key: val, name: wallets[val].name, total: wallets[val].total })
-    //     })
-    //   }
-    //   this.setState({ listWallet: tempArr })
-    // }
-
-
-    // getItem = value => {
-    //   this.setState({
-    //     walletName: value.name,
-    //     walletAmount: value.total
-    //   })
-    // }
 
     render() {
       const authUser = this.state

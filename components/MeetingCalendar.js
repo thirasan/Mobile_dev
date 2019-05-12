@@ -11,42 +11,31 @@ export default class MeetingCalendar extends Component {
     super(props)
     this.state = {
       items: {
-        "2017-05-15": [
-          {
-            "height": 96,
-            "name": "Item for 2017-05-15",
-          },
-          {
-            "height": 50,
-            "name": "Item for 2017-05-15",
-          },
-          {
-            "height": 50,
-            "name": "Item for 2017-05-15",
-          },
-        ],
-        "2017-05-16": [
-        ]
       }
     };
   }
   componentDidMount () {
     const {firebase} = this.props
     firebase.database.child(firebase.auth.currentUser.uid).on('value', snapshot => {
-      let tempArr = []
       const meeting = snapshot.val()
-      if (meeting === undefined) return
-      Object.keys(meeting).forEach(val => {
-        tempArr.push({
-          firstName: meeting[val].firstName,
-          lastName: meeting[val].lastName,
-          id: meeting[val].id,
-          meetingName: meeting[val].meetingName,
-          scheduleList: meeting[val].scheduleList.reduce((accumulator, currentValue) => {
-            return accumulator + currentValue.date + '   '
-          }, 'Schedule: ')
+      if (meeting !== null) {
+        Object.keys(meeting).forEach(val => {
+          meeting[val].scheduleList.forEach(schedule => {
+            if(!this.state.items[schedule.date]) {
+              this.state.items[schedule.date] = []
+            }
+            this.state.items[schedule.date].push({
+              name: 'Meeting Name: ' + meeting[val].meetingName + '\nParticipate: ' + meeting[val].firstName + '\nTime: ' + schedule.time,
+              height: 75
+            });
+          })
         })
-      })
+        const newItems = {};
+        Object.keys(this.state.items).forEach(key => {newItems[key] = this.state.items[key];});
+        this.setState({
+          items: newItems
+        });
+      }
     })
   }
   render(){
@@ -54,7 +43,7 @@ export default class MeetingCalendar extends Component {
       <Agenda
         items={this.state.items}
         loadItemsForMonth={this.loadItems.bind(this)}
-        selected={'2017-05-16'}
+        selected={'2019-05-13'}
         renderItem={this.renderItem.bind(this)}
         renderEmptyDate={this.renderEmptyDate.bind(this)}
         rowHasChanged={this.rowHasChanged.bind(this)}
@@ -85,14 +74,7 @@ export default class MeetingCalendar extends Component {
         const time = day.timestamp + i * 24 * 60 * 60 * 1000;
         const strTime = this.timeToString(time);
         if (!this.state.items[strTime]) {
-          this.state.items[strTime] = [];
-          const numItems = Math.floor(Math.random() * 5);
-          for (let j = 0; j < numItems; j++) {
-            this.state.items[strTime].push({
-              name: 'Item for ' + strTime,
-              height: Math.max(50, Math.floor(Math.random() * 150))
-            });
-          }
+          this.state.items[strTime] = []
         }
       }
       const newItems = {};

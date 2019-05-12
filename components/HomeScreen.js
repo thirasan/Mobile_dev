@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import { StyleSheet, SafeAreaView, View } from 'react-native'
 import { Container, Header, Left, Body, Right, Button, Icon, Segment, Content, Text } from 'native-base';
 
 // Components
@@ -24,8 +23,8 @@ export default class HomeScreen extends Component {
   renderScreen = () => {
     switch(this.state.currentScreen) {
       case('calendar') : return <MeetingCalendar {...this.props}/>
-      case('meetingList') : return <MeetingList {...this.props}/>
-      case('addMeeting') : return <AddMeeting {...this.props}/>
+      case('scheduleList') : return <MeetingList {...this.props}/>
+      case('addMeeting') : return <AddMeeting switchScreen={this.switchScreen} {...this.props}/>
     }
 
   }
@@ -40,8 +39,8 @@ export default class HomeScreen extends Component {
           </Left>
           <Body>
             <Segment>
-              <Button first active onPress={()=> this.switchScreen('calendar')}><Text>Puppies</Text></Button>
-              <Button last onPress={()=> this.switchScreen('meetingList')}><Text>Cubs</Text></Button>
+              <Button first active={this.state.currentScreen === 'calendar' ? true : false} onPress={()=> this.switchScreen('calendar')}><Text>Calendar</Text></Button>
+              <Button last active={this.state.currentScreen === 'scheduleList' ? true : false} onPress={()=> this.switchScreen('scheduleList')}><Text>Schedules</Text></Button>
             </Segment>
           </Body>
           <Right>
