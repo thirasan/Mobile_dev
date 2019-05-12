@@ -1,13 +1,15 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
+import { Container, Header, Left, Body, Right, Button, Icon, Segment, Content, Text } from 'native-base';
 
 // Components
-import Landing from './components/Landing'
-import Show from './components/Show'
+import MeetingCalendar from './components/MeetingCalendar'
+import MeetingList from './components/MeetingList'
+import AddMeeting from './components/AddMeeting'
 
 export default class App extends React.Component {
   state = {
-    currentScreen: 'landing'
+    currentScreen: 'calendar'
   }
 
   switchScreen = screen => {
@@ -16,15 +18,40 @@ export default class App extends React.Component {
     })
   }
 
-  renderScreen = () => (
-    (this.state.currentScreen === 'landing')? 
-    <Landing switchScreen={this.switchScreen} /> :
-    <Show switchScreen={this.switchScreen} />
-  )
+  renderScreen = () => {
+    switch(this.state.currentScreen) {
+      case('calendar') : return <MeetingCalendar />
+      case('meetingList') : return <MeetingList />
+      case('addMeeting') : return <AddMeeting />
+    }
+
+  }
 
   render() {
     return (
-      this.renderScreen()
+      <Container>
+        <Header hasSegment>
+          <Left>
+            <Button transparent>
+              <Icon name="arrow-back" />
+            </Button>
+          </Left>
+          <Body>
+            <Segment>
+              <Button first active onPress={()=> this.switchScreen('calendar')}><Text>Puppies</Text></Button>
+              <Button last onPress={()=> this.switchScreen('meetingList')}><Text>Cubs</Text></Button>
+            </Segment>
+          </Body>
+          <Right>
+            <Button transparent>
+              <Icon name="add" onPress={()=> this.switchScreen('addMeeting')}/>
+            </Button>
+          </Right>
+        </Header>
+        <Content padder>
+          {this.renderScreen()}
+        </Content>
+      </Container>
     )
   }
 }
